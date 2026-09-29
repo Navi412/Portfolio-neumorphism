@@ -5,7 +5,7 @@ import { PageHeader, PageShell } from "@/components/ui";
 import { carta } from "@/lib/content";
 
 const B = ({ children }: { children: React.ReactNode }) => (
-  <strong className="font-bold text-accent">{children}</strong>
+  <strong className="font-bold text-accent-ink">{children}</strong>
 );
 
 export default function CartaPage() {
@@ -38,7 +38,7 @@ export default function CartaPage() {
         transition={{ delay: 0.1, duration: 0.45 }}
         className="neu relative mt-8 rounded-[2rem] px-6 py-10 sm:px-14 sm:py-14"
       >
-        <p className="absolute top-5 right-6 font-mono text-[10px] tracking-[0.2em] text-muted" aria-hidden="true">
+        <p className="absolute top-5 right-6 font-mono text-[11px] tracking-[0.15em] text-muted" aria-hidden="true">
           SYS.LOG // REFERENCE_VERIFIED
         </p>
 
@@ -99,9 +99,9 @@ export default function CartaPage() {
             <span className="neu-inset-sm flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
               <span className="glow h-3 w-3 rounded-full bg-emerald-500 text-emerald-500" aria-hidden="true" />
             </span>
-            <div className="font-mono text-[11px] leading-relaxed tracking-wider">
+            <div className="font-mono text-xs leading-relaxed tracking-wide">
               {carta.sello.map((line, i) => (
-                <span key={line} className={`block ${i === 0 ? "font-bold text-accent" : "text-muted"}`}>
+                <span key={line} className={`block ${i === 0 ? "font-bold text-accent-ink" : "text-muted"}`}>
                   {line}
                 </span>
               ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PageHeader, PageShell } from "@/components/ui";
+import { inkColor, PageHeader, PageShell } from "@/components/ui";
 import { skillAccents, skillCategories } from "@/lib/content";
 
 export default function HabilidadesPage() {
@@ -23,11 +23,11 @@ export default function HabilidadesPage() {
               <div className="flex items-center justify-between gap-3">
                 <span
                   className="neu-inset-sm flex h-11 w-11 items-center justify-center rounded-full font-mono text-xs font-bold"
-                  style={{ color: accent }}
+                  style={{ color: inkColor(accent) }}
                 >
                   {cat.id}
                 </span>
-                <span className="font-mono text-[11px] tracking-[0.18em] text-muted uppercase">{cat.subtitle}</span>
+                <span className="eyebrow text-muted uppercase">{cat.subtitle}</span>
               </div>
               <h2 className="mt-5 text-2xl font-extrabold tracking-tight sm:text-3xl">{cat.title}</h2>
 
@@ -36,7 +36,7 @@ export default function HabilidadesPage() {
                   <li key={s.name}>
                     <div className="flex items-baseline justify-between gap-3">
                       <span className="text-sm font-semibold">{s.name}</span>
-                      <span className="shrink-0 font-mono text-xs font-bold" style={{ color: accent }}>
+                      <span className="shrink-0 font-mono text-xs font-bold" style={{ color: inkColor(accent) }}>
                         <span className="hidden sm:inline">LVL {s.level}</span>
                         <span className="sm:hidden">{s.level}%</span>
                       </span>

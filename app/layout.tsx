@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
-import ThemeToggle, { themeInitScript } from "@/components/ThemeToggle";
+import ThemeToggle from "@/components/ThemeToggle";
+import { introInitScript, themeInitScript } from "@/lib/initScripts";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"] });
@@ -22,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript + ";" + introInitScript }} />
       </head>
       <body className="min-h-full overflow-x-hidden">
         <ThemeToggle />

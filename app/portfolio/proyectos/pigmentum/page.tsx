@@ -10,7 +10,7 @@ const accent = projectAccents.pigmentum;
 const { gameUrl, tech } = pigmentum;
 
 const overlayBtn =
-  "neu-sm rounded-full px-4 py-2 font-mono text-[11px] font-medium tracking-[0.15em] transition-all hover:text-accent active:neu-inset-sm";
+  "neu-sm rounded-full px-4 py-2 eyebrow transition-all hover:text-accent-ink active:neu-inset-sm";
 
 export default function PigmentumPage() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -83,7 +83,7 @@ export default function PigmentumPage() {
 
         {/* Ficha */}
         <section className="neu mt-12 grid gap-6 rounded-[2rem] p-6 sm:p-10 lg:grid-cols-[220px_1fr]">
-          <p className="neu-inset-sm self-start justify-self-start rounded-full px-4 py-1.5 font-mono text-[11px] font-medium tracking-[0.2em] text-accent">
+          <p className="neu-inset-sm self-start justify-self-start rounded-full px-4 py-1.5 eyebrow text-accent-ink">
             {pigmentum.label}
           </p>
           <div>

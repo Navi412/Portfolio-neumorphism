@@ -15,7 +15,7 @@ export function PageHeader({ title, badge, backHref, backLabel, hideBadgeOnMobil
     <header className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
         <p
-          className={`neu-inset-sm mb-4 inline-block rounded-full px-4 py-1.5 font-mono text-[11px] font-medium tracking-[0.2em] text-accent ${
+          className={`neu-inset-sm mb-4 inline-block rounded-full px-4 py-1.5 eyebrow text-accent-ink ${
             hideBadgeOnMobile ? "hidden sm:inline-block" : ""
           }`}
         >
@@ -27,7 +27,7 @@ export function PageHeader({ title, badge, backHref, backLabel, hideBadgeOnMobil
       </div>
       <Link
         href={backHref}
-        className="neu-sm shrink-0 self-start rounded-full px-5 py-2.5 font-mono text-xs font-medium tracking-[0.15em] text-muted transition-all hover:text-accent active:neu-inset-sm sm:self-auto"
+        className="neu-sm shrink-0 self-start rounded-full px-5 py-2.5 eyebrow text-muted transition-all hover:text-accent-ink active:neu-inset-sm sm:self-auto"
       >
         {`// ${backLabel}`}
       </Link>
@@ -56,6 +56,9 @@ export function BgWord({ word }: { word: string }) {
   );
 }
 
+/** Versión legible de un color de acento para texto pequeño (igual que `text-accent-ink`). */
+export const inkColor = (accent: string) => `oklch(from ${accent} var(--ink-l) c h)`;
+
 export function TagList({ tags, accent }: { tags: string[]; accent?: string }) {
   return (
     <ul className="flex flex-wrap gap-2.5">
@@ -63,7 +66,7 @@ export function TagList({ tags, accent }: { tags: string[]; accent?: string }) {
         <li
           key={tag}
           className="neu-sm rounded-full px-3.5 py-1.5 text-xs font-semibold"
-          style={{ color: accent ?? "var(--muted)" }}
+          style={{ color: accent ? inkColor(accent) : "var(--muted)" }}
         >
           {tag}
         </li>

@@ -6,11 +6,12 @@
 :root {
   --bg: #eef0f4;
   --fg: #383c45;
-  --muted: #8b909b;
+  --muted: #666c78;
   --sh-light: #ffffff;
   --sh-dark: #cdd2db;
   --accent: #ff6a2c;
   --on-accent: #ffffff;
+  --ink-l: 0.6; /* luminosidad OKLCH del acento en texto pequeño */
   color-scheme: light;
 }
 
@@ -19,10 +20,11 @@
   :root:not([data-theme="light"]) {
     --bg: #2a2d32;
     --fg: #e4e7ec;
-    --muted: #8d939d;
+    --muted: #a1a7b1;
     --sh-light: #35393f;
     --sh-dark: #1b1d21;
     --accent: #4d82ff;
+    --ink-l: 0.78;
     color-scheme: dark;
   }
 }
@@ -30,21 +32,34 @@
 :root[data-theme="dark"] {
   --bg: #2a2d32;
   --fg: #e4e7ec;
-  --muted: #8d939d;
+  --muted: #a1a7b1;
   --sh-light: #35393f;
   --sh-dark: #1b1d21;
   --accent: #4d82ff;
+  --ink-l: 0.78;
   color-scheme: dark;
 }
 
-/* Transición suave solo mientras se cambia de tema */
-.theme-switching,
-.theme-switching * {
-  transition:
-    background-color 0.45s ease,
-    color 0.45s ease,
-    box-shadow 0.45s ease,
-    text-shadow 0.45s ease !important;
+/* Intro ya vista en esta pestaña: el loader no llega a pintarse (ver lib/initScripts.ts) */
+:root[data-intro-seen] .intro-loader {
+  display: none;
+}
+
+/* Cambio de tema tipo gota (View Transitions): sin el fundido por defecto; la
+   vista nueva se descubre con un círculo que anima ThemeToggle.tsx, y la
+   anterior se apaga un poco mientras la gota se extiende. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation: drop-behind 0.85s ease-in both;
+}
+
+@keyframes drop-behind {
+  to { filter: brightness(0.8); }
 }
 
 @theme inline {
@@ -52,6 +67,10 @@
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
+  /* Acento para texto pequeño: mismo tono y saturación que el acento, solo con
+     otra luminosidad (--ink-l) para que tenga contraste. Al ser "inline",
+     sigue también a los acentos propios de cada proyecto. */
+  --color-accent-ink: oklch(from var(--accent) var(--ink-l) c h);
   --color-on-accent: var(--on-accent);
   --font-sans: var(--font-jakarta);
   --font-mono: var(--font-jetbrains);
@@ -76,6 +95,21 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
+}
+
+/* ---------- Tipografía ---------- */
+
+/* Rótulos pequeños (subtítulos, etiquetas de estado…): legibles, sin monoespaciada */
+@utility eyebrow {
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  line-height: 1.35;
+
+  @media (width >= 40rem) {
+    font-size: 0.82rem;
+  }
 }
 
 /* ---------- Superficies ---------- */
@@ -138,6 +172,17 @@ body {
   animation: marquee 40s linear infinite;
 }
 
+/* Columnas del gráfico de GitHub: aparecen de izquierda a derecha */
+@keyframes gh-week-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.gh-week {
+  animation: gh-week-in 0.5s ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee { animation: none; }
+  .gh-week { animation: none; }
 }

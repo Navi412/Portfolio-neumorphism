@@ -19,6 +19,8 @@ export type Estudio = {
   desc: string;
   tags: string[];
   logo?: string;
+  /** Formación todavía en curso o por empezar (cambia el indicador de estado). */
+  enCurso?: boolean;
 };
 
 export type Proyecto = {
@@ -74,6 +76,18 @@ export const actionLinks: ActionLink[] = [
 export const estudios: Estudio[] = [
   {
     id: "01",
+    title: "CURSO DE ESPECIALIZACIÓN EN INTELIGENCIA ARTIFICIAL Y BIG DATA",
+    subtitle: "TÍTULO OFICIAL DE FP · 600 H · PRESENCIAL",
+    status: "EN CURSO",
+    centro: "Instituto Nebrija de Formación Profesional (Nebrija FP) · Campus de Princesa, Madrid",
+    fecha: "2026 - 2027",
+    desc: "Amplío mi perfil de desarrollador con una especialización oficial en inteligencia artificial y big data, basada en proyectos y con enfoque laboral. Quiero aprender a analizar datos y a aplicar modelos de IA para llevarlos a las aplicaciones y videojuegos que desarrollo.",
+    tags: ["Inteligencia Artificial", "Big Data", "Análisis de Datos", "Aprendizaje por Proyectos"],
+    logo: "/logotipo-universidad-nebrija.jpg",
+    enCurso: true,
+  },
+  {
+    id: "02",
     title: "DESARROLLO DE APLICACIONES MULTIPLATAFORMA",
     subtitle: "GRADO SUPERIOR (DAM)",
     status: "COMPLETADO",
@@ -84,7 +98,7 @@ export const estudios: Estudio[] = [
     logo: "/logo-centro.png",
   },
   {
-    id: "02",
+    id: "03",
     title: "BACHILLERATO EN CIENCIAS SOCIALES",
     subtitle: "EDUCACIÓN SECUNDARIA POSTOBLIGATORIA",
     status: "COMPLETADO",

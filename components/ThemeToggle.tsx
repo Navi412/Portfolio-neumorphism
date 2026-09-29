@@ -2,13 +2,10 @@
 
 import { motion, type Transition } from "framer-motion";
 import { useEffect, useSyncExternalStore } from "react";
+import { THEME_KEY as STORAGE_KEY } from "@/lib/initScripts";
 
 type Theme = "light" | "dark";
 
-const STORAGE_KEY = "theme";
-
-/** Script que fija el tema antes del primer pintado (ver app/layout.tsx). */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){}})()`;
 
 function subscribe(callback: () => void) {
   const observer = new MutationObserver(callback);
@@ -28,11 +25,49 @@ function readStored(): Theme | null {
   }
 }
 
-function applyTheme(theme: Theme, persist: boolean) {
+/**
+ * Cambia el tema con una "gota": el navegador hace una captura de la vista actual,
+ * aplica el tema nuevo de golpe por debajo y lo descubre con un círculo que nace
+ * como una gotita en `origin` (el interruptor) y se derrama hasta cubrir la pantalla.
+ * Como no se animan colores ni sombras elemento a elemento, no hay tirones.
+ * Sin soporte o con movimiento reducido, el cambio es instantáneo.
+ */
+function applyTheme(theme: Theme, persist: boolean, origin?: { x: number; y: number }) {
   const root = document.documentElement;
-  root.classList.add("theme-switching");
-  root.dataset.theme = theme;
-  window.setTimeout(() => root.classList.remove("theme-switching"), 500);
+  const set = () => {
+    root.dataset.theme = theme;
+  };
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (typeof document.startViewTransition === "function" && !reduce) {
+    const x = origin?.x ?? window.innerWidth / 2;
+    const y = origin?.y ?? window.innerHeight / 2;
+    // Radio hasta la esquina más lejana, para cubrir toda la pantalla.
+    const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+
+    const transition = document.startViewTransition(set);
+    transition.ready
+      .then(() => {
+        root.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(26px at ${x}px ${y}px)`, // se forma la gota
+              `circle(${r}px at ${x}px ${y}px)`, // y se derrama
+            ],
+            offset: [0, 0.22, 1],
+            easing: ["cubic-bezier(0.3, 1.6, 0.5, 1)", "cubic-bezier(0.7, 0, 0.25, 1)"],
+          },
+          { duration: 850, pseudoElement: "::view-transition-new(root)" },
+        );
+      })
+      .catch(() => {
+        /* transición omitida (p. ej. pestaña oculta): el tema ya está aplicado */
+      });
+  } else {
+    set();
+  }
+
   if (persist) {
     try {
       localStorage.setItem(STORAGE_KEY, theme);
@@ -84,7 +119,14 @@ export default function ThemeToggle() {
       aria-checked={isDark}
       aria-label="Modo oscuro"
       title={label}
-      onClick={() => applyTheme(isDark ? "light" : "dark", true)}
+      onClick={(e) => {
+        // La gota nace en el centro del interruptor.
+        const rect = e.currentTarget.getBoundingClientRect();
+        applyTheme(isDark ? "light" : "dark", true, {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        });
+      }}
       className="neu-inset fixed top-4 right-4 z-40 h-11 w-[5.25rem] rounded-full p-1 sm:top-6 sm:right-6"
     >
       {theme && (

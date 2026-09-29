@@ -37,7 +37,7 @@ export default function ProyectosPage() {
                         className="object-cover lg:opacity-70 lg:saturate-0 lg:transition-all lg:duration-500 lg:group-hover:scale-105 lg:group-hover:opacity-100 lg:group-hover:saturate-100"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center font-mono text-xs tracking-[0.2em] text-accent">
+                      <div className="flex h-full w-full items-center justify-center eyebrow text-accent-ink">
                         {p.imagePlaceholder}
                       </div>
                     )}
@@ -45,8 +45,8 @@ export default function ProyectosPage() {
                 </div>
 
                 <div className="flex min-w-0 flex-col px-2 pb-2 lg:py-4 lg:pr-4">
-                  <div className="flex items-center justify-between gap-4 font-mono text-[11px] tracking-[0.2em]">
-                    <span className="neu-inset-sm rounded-full px-3 py-1 font-medium text-accent">
+                  <div className="flex items-center justify-between gap-4 eyebrow">
+                    <span className="neu-inset-sm rounded-full px-3 py-1 text-accent-ink">
                       <span className="sm:hidden">#{p.id}</span>
                       <span className="hidden sm:inline">{p.id}</span>
                     </span>

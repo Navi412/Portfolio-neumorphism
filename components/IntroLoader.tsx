@@ -22,7 +22,7 @@ export default function IntroLoader({ finishLoading }: IntroLoaderProps) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-14 bg-base px-4"
+      className="intro-loader fixed inset-0 z-50 flex flex-col items-center justify-center gap-14 bg-base px-4"
       exit={{ opacity: 0, scale: 1.03 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
       role="status"

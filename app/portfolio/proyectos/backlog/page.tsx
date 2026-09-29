@@ -8,7 +8,7 @@ const accent = projectAccents.backlog;
 const { repoUrl, tech, funcionalidades } = backlog;
 
 const Code = ({ children }: { children: React.ReactNode }) => (
-  <code className="neu-inset-sm rounded-md px-1.5 py-0.5 font-mono text-[0.85em] text-accent">{children}</code>
+  <code className="neu-inset-sm rounded-md px-1.5 py-0.5 font-mono text-[0.85em] text-accent-ink">{children}</code>
 );
 
 export default function BacklogPage() {
@@ -42,7 +42,7 @@ export default function BacklogPage() {
 
         {/* 2. Ficha */}
         <section className="neu mt-12 grid gap-6 rounded-[2rem] p-6 sm:p-10 lg:grid-cols-[240px_1fr]">
-          <p className="neu-inset-sm self-start justify-self-start rounded-full px-4 py-1.5 font-mono text-[11px] font-medium tracking-[0.2em] text-accent">
+          <p className="neu-inset-sm self-start justify-self-start rounded-full px-4 py-1.5 eyebrow text-accent-ink">
             {backlog.label}
           </p>
           <div>
@@ -59,7 +59,7 @@ export default function BacklogPage() {
           <ol className="mt-8 grid gap-6 md:grid-cols-2">
             {funcionalidades.map((f, i) => (
               <li key={f} className="neu flex items-start gap-4 rounded-3xl p-5">
-                <span className="neu-inset-sm flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold text-accent">
+                <span className="neu-inset-sm flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold text-accent-ink">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="pt-2 leading-relaxed">{f}</span>
