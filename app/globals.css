@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/* ---------- Tokens (neumorphism) ---------- */
+
+/* Claro: blanco y naranja */
+:root {
+  --bg: #eef0f4;
+  --fg: #383c45;
+  --muted: #8b909b;
+  --sh-light: #ffffff;
+  --sh-dark: #cdd2db;
+  --accent: #ff6a2c;
+  --on-accent: #ffffff;
+  color-scheme: light;
+}
+
+/* Oscuro: gris y azul */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #2a2d32;
+    --fg: #e4e7ec;
+    --muted: #8d939d;
+    --sh-light: #35393f;
+    --sh-dark: #1b1d21;
+    --accent: #4d82ff;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #2a2d32;
+  --fg: #e4e7ec;
+  --muted: #8d939d;
+  --sh-light: #35393f;
+  --sh-dark: #1b1d21;
+  --accent: #4d82ff;
+  color-scheme: dark;
+}
+
+/* Transición suave solo mientras se cambia de tema */
+.theme-switching,
+.theme-switching * {
+  transition:
+    background-color 0.45s ease,
+    color 0.45s ease,
+    box-shadow 0.45s ease,
+    text-shadow 0.45s ease !important;
+}
+
+@theme inline {
+  --color-base: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-jetbrains);
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ---------- Superficies ---------- */
+
+/* Relieve: el elemento sobresale del fondo */
+@utility neu {
+  background: var(--bg);
+  box-shadow: 9px 9px 18px var(--sh-dark), -9px -9px 18px var(--sh-light);
+}
+
+@utility neu-sm {
+  background: var(--bg);
+  box-shadow: 4px 4px 9px var(--sh-dark), -4px -4px 9px var(--sh-light);
+}
+
+/* Hundido: el elemento está presionado dentro del fondo */
+@utility neu-inset {
+  background: var(--bg);
+  box-shadow: inset 7px 7px 14px var(--sh-dark), inset -7px -7px 14px var(--sh-light);
+}
+
+@utility neu-inset-sm {
+  background: var(--bg);
+  box-shadow: inset 3px 3px 7px var(--sh-dark), inset -3px -3px 7px var(--sh-light);
+}
+
+/* Botón de acento con brillo */
+@utility neu-accent {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow:
+    5px 5px 12px var(--sh-dark),
+    -5px -5px 12px var(--sh-light),
+    0 0 22px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* Texto en relieve (mismo color que el fondo) */
+@utility neu-emboss {
+  color: var(--bg);
+  text-shadow: 4px 4px 8px var(--sh-dark), -4px -4px 8px var(--sh-light);
+}
+
+/* Texto con ligero relieve, legible */
+@utility neu-text {
+  text-shadow: 2px 2px 4px var(--sh-dark), -2px -2px 4px var(--sh-light);
+}
+
+@utility glow {
+  box-shadow: 0 0 12px color-mix(in srgb, currentColor 60%, transparent);
+}
+
+/* ---------- Animaciones ---------- */
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none; }
+}
