@@ -32,6 +32,8 @@ export type Proyecto = {
   desc: string;
   imageUrl: string | undefined;
   imagePlaceholder: string;
+  /** "icon": imagen cuadrada tipo icono de app, se muestra centrada y entera. */
+  imageFit?: "cover" | "icon";
 };
 
 export type Skill = { name: string; level: number };
@@ -54,8 +56,8 @@ export type SocialLink = {
 /* ---------- Menú principal ---------- */
 
 export const menuItems: MenuItem[] = [
-  { title: "ESTUDIOS", subtitle: "Academic Stats", url: "/portfolio/estudios" },
   { title: "PROYECTOS", subtitle: "Infiltrations & Apps", url: "/portfolio/proyectos" },
+  { title: "ESTUDIOS", subtitle: "Academic Stats", url: "/portfolio/estudios" },
   { title: "HABILIDADES", subtitle: "Technical Skills", url: "/portfolio/habilidades" },
   { title: "SOCIAL LINK", subtitle: "Contact & Network", url: "/portfolio/social" },
 ];
@@ -130,7 +132,7 @@ export const proyectos: Proyecto[] = [
     type: "APP // DESKTOP & ANDROID",
     tech: ["Node.js", "node:sqlite", "Electron", "Vanilla JS"],
     desc: "App personal para llevar un registro único de tu biblioteca de videojuegos y horas jugadas, sincronizando Steam, Xbox/Game Pass y Epic automáticamente. Deriva las sesiones jugadas a partir de snapshots periódicos del contador acumulado, ya que ninguna API ofrece histórico directo.",
-    imageUrl: undefined,
+    imageUrl: "/backlog-tarjeta.png",
     imagePlaceholder: "BACKLOG_APP.PNG",
   },
 ];
@@ -151,10 +153,9 @@ export const pigmentum = {
 export const backlog = {
   repoUrl: "https://github.com/Navi412/App-Steamdb",
   tech: ["Node.js", "node:sqlite", "Electron", "HTML/CSS/JS", "GitHub Actions"],
-  intro:
-    "Un único lugar para ver cuántas horas sumás entre Steam, Xbox y Epic — sin depender de que cada launcher lleve su propia cuenta.",
+  intro: "Todas tus horas de juego de Steam, Xbox y Epic en un solo sitio.",
   label: "TRACKER DE VIDEOJUEGOS",
-  desc: "Siempre me picó la curiosidad por saber cuántas horas sumaba en total entre todos mis videojuegos, pero cada launcher las guarda por su lado y no hay forma de juntarlas. Backlog nació de eso: un sitio único donde ver tu biblioteca y tus horas jugadas, vengan de Steam, Xbox, Epic o de donde sea.",
+  desc: "Nació de querer saber cuántas horas llevo jugadas en total. Cada launcher guarda las suyas por separado, así que Backlog las junta en una sola biblioteca.",
   funcionalidades: [
     "Sincroniza automáticamente la biblioteca de Steam y, opcionalmente, Xbox/Game Pass y Epic Games.",
     "Guarda snapshots periódicos del contador acumulado de horas y deriva sola cuánto se jugó en cada intervalo, ya que ninguna API ofrece histórico directo.",

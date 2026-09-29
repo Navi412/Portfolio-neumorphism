@@ -28,13 +28,25 @@ export default function ProyectosPage() {
               >
                 <div className="neu-inset rounded-3xl p-2.5 sm:p-3">
                   <div className="relative aspect-video overflow-hidden rounded-2xl lg:aspect-auto lg:h-full lg:min-h-72">
-                    {p.imageUrl ? (
+                    {p.imageUrl && p.imageFit === "icon" ? (
+                      // Icono de app: centrado, entero y flotando sobre el hueco.
+                      <div className="flex h-full min-h-48 w-full items-center justify-center p-6">
+                        <Image
+                          src={p.imageUrl}
+                          alt={`Icono de ${p.title}`}
+                          width={160}
+                          height={160}
+                          unoptimized
+                          className="h-32 w-32 drop-shadow-[0_12px_18px_rgba(0,0,0,0.25)] sm:h-40 sm:w-40 lg:transition-transform lg:duration-500 lg:group-hover:scale-105 lg:group-hover:-rotate-3"
+                        />
+                      </div>
+                    ) : p.imageUrl ? (
                       <Image
                         src={p.imageUrl}
                         alt={`Fondo de ${p.title}`}
                         fill
                         sizes="(min-width: 1024px) 55vw, 100vw"
-                        className="object-cover lg:opacity-70 lg:saturate-0 lg:transition-all lg:duration-500 lg:group-hover:scale-105 lg:group-hover:opacity-100 lg:group-hover:saturate-100"
+                        className="object-cover object-top lg:transition-transform lg:duration-500 lg:group-hover:scale-105"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center eyebrow text-accent-ink">
