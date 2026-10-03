@@ -3,12 +3,13 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useStrings } from "@/lib/strings";
 
 type ErrorScreenProps = {
   code: string;
   log: string;
-  title: string;
-  message: string;
+  /** Qué textos mostrar (se eligen según el idioma). */
+  variant: "notFound" | "error" | "global";
   /** Si se pasa, muestra el botón de reintentar. */
   onRetry?: () => void;
   /** En global-error no hay layout ni router fiable: se usan enlaces normales. */
@@ -31,9 +32,14 @@ function Nav({ href, plain, className, children }: { href: string; plain?: boole
 }
 
 /** Pantalla de error neumórfica, compartida por la 404 y los errores de carga. */
-export default function ErrorScreen({ code, log, title, message, onRetry, plainLinks }: ErrorScreenProps) {
+export default function ErrorScreen({ code, log, variant, onRetry, plainLinks }: ErrorScreenProps) {
+  const s = useStrings();
+  const title = variant === "notFound" ? s.notFoundTitle : s.errorTitle;
+  const message =
+    variant === "notFound" ? s.notFoundMessage : variant === "global" ? s.globalErrorMessage : s.errorMessage;
+
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-16">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 pt-32 pb-16 sm:py-32">
       <motion.section
         initial={{ opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -67,7 +73,7 @@ export default function ErrorScreen({ code, log, title, message, onRetry, plainL
               onClick={onRetry}
               className="neu-accent rounded-full px-6 py-3 text-xs font-bold tracking-[0.15em] transition-transform duration-300 hover:-translate-y-0.5"
             >
-              ↻ REINTENTAR
+              {s.retry}
             </button>
           )}
           <Nav
@@ -79,10 +85,10 @@ export default function ErrorScreen({ code, log, title, message, onRetry, plainL
                 : "neu-accent rounded-full px-6 py-3 text-xs font-bold tracking-[0.15em] transition-transform duration-300 hover:-translate-y-0.5"
             }
           >
-            VOLVER AL INICIO
+            {s.home}
           </Nav>
           <Nav href="/portfolio" plain={plainLinks} className={secondaryBtn}>
-            {"// MENÚ"}
+            {s.menu}
           </Nav>
         </div>
       </motion.section>

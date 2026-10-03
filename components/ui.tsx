@@ -13,7 +13,7 @@ type PageHeaderProps = {
 export function PageHeader({ title, badge, backHref, backLabel, hideBadgeOnMobile }: PageHeaderProps) {
   return (
     <header className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-      <div className="min-w-0">
+      <div className="min-w-0 pr-24 sm:pr-28 xl:pr-0">
         <p
           className={`neu-inset-sm mb-4 inline-block rounded-full px-4 py-1.5 eyebrow text-accent-ink ${
             hideBadgeOnMobile ? "hidden sm:inline-block" : ""

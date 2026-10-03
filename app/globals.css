@@ -182,7 +182,32 @@ body {
   animation: gh-week-in 0.5s ease-out both;
 }
 
+/* ---------- Decoración de fondo (components/BgDecor.tsx) ---------- */
+
+.decor-glow {
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 16%, transparent), transparent);
+}
+
+/* Puntos hundidos que solo se ven cerca de los bordes de la pantalla */
+.decor-dots {
+  background-image: radial-gradient(var(--sh-dark) 1.3px, transparent 1.8px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 75% 70% at center, transparent 45%, black 100%);
+}
+
+@keyframes decor-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+.decor-float { animation: decor-float 11s ease-in-out infinite; }
+.decor-delay-1 { animation-duration: 13s; animation-delay: -4s; }
+.decor-delay-2 { animation-duration: 15s; animation-delay: -8s; }
+.decor-delay-3 { animation-duration: 9s; animation-delay: -2s; }
+
 @media (prefers-reduced-motion: reduce) {
   .marquee { animation: none; }
   .gh-week { animation: none; }
+  .decor-float { animation: none; }
 }

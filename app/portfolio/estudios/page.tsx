@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { PageHeader, PageShell, TagList } from "@/components/ui";
 import { estudios } from "@/lib/content";
+import { useT } from "@/lib/i18n";
+import { useStrings } from "@/lib/strings";
 
 // Logos con mucho margen propio: se muestran más grandes para igualar tamaños.
 const logoScale: Record<string, string> = {
@@ -12,9 +14,11 @@ const logoScale: Record<string, string> = {
 };
 
 export default function EstudiosPage() {
+  const t = useT();
+  const s = useStrings();
   return (
     <PageShell bgWord="STATS">
-      <PageHeader title="Estudios" badge="TRAINING & SKILLS" backHref="/portfolio" backLabel="ATRÁS" />
+      <PageHeader title={s.studiesTitle} badge="TRAINING & SKILLS" backHref="/portfolio" backLabel={s.back} />
 
       <div className="mt-12 flex flex-col gap-10">
         {estudios.map((e, i) => (
@@ -35,7 +39,7 @@ export default function EstudiosPage() {
                 {e.logo ? (
                   <Image
                     src={e.logo}
-                    alt={`Logo de ${e.centro}`}
+                    alt={s.logoOf(t(e.centro).split(" · ")[0])}
                     width={144}
                     height={144}
                     className={`h-full w-full object-contain p-2 ${logoScale[e.logo] ?? ""}`}
@@ -47,8 +51,8 @@ export default function EstudiosPage() {
             </div>
 
             <div className="min-w-0">
-              <p className="eyebrow text-accent-ink">{e.subtitle}</p>
-              <h2 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight sm:text-3xl">{e.title}</h2>
+              <p className="eyebrow text-accent-ink">{t(e.subtitle)}</p>
+              <h2 className="mt-2 text-2xl leading-tight font-extrabold tracking-tight sm:text-3xl">{t(e.title)}</h2>
 
               <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
                 <span className="neu-inset-sm inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 eyebrow">
@@ -58,15 +62,15 @@ export default function EstudiosPage() {
                     }`}
                     aria-hidden="true"
                   />
-                  {e.status}
+                  {t(e.status)}
                 </span>
-                <span className="font-semibold">{e.centro}</span>
+                <span className="font-semibold">{t(e.centro)}</span>
                 <span className="font-semibold text-muted">{e.fecha}</span>
               </div>
 
-              <p className="mt-5 max-w-3xl leading-relaxed text-muted">{e.desc}</p>
+              <p className="mt-5 max-w-3xl leading-relaxed text-muted">{t(e.desc)}</p>
               <div className="mt-6">
-                <TagList tags={e.tags} />
+                <TagList tags={t(e.tags)} />
               </div>
             </div>
           </motion.article>

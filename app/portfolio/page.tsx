@@ -6,6 +6,8 @@ import { useState, type ReactNode } from "react";
 import { ActionButton } from "@/components/HomeWidgets";
 import { BgWord } from "@/components/ui";
 import { actionLinks, estudios, menuItems, proyectos, skillCategories, socialLinks } from "@/lib/content";
+import { useT } from "@/lib/i18n";
+import { useStrings, type Strings } from "@/lib/strings";
 
 const scene: Variants = {
   hidden: {},
@@ -21,12 +23,12 @@ const ringSpring: Transition = { type: "spring", stiffness: 380, damping: 34, ma
 
 // Dato real de cada sección, sacado del propio contenido.
 const skillCount = skillCategories.reduce((n, c) => n + c.skills.length, 0);
-const tileMeta: Record<string, string> = {
-  "/portfolio/estudios": `${estudios.length} formaciones`,
-  "/portfolio/proyectos": `${proyectos.length} proyectos`,
-  "/portfolio/habilidades": `${skillCount} habilidades`,
-  "/portfolio/social": `${socialLinks.length} canales`,
-};
+const tileMeta = (s: Strings): Record<string, string> => ({
+  "/portfolio/estudios": s.countStudies(estudios.length),
+  "/portfolio/proyectos": s.countProjects(proyectos.length),
+  "/portfolio/habilidades": s.countSkills(skillCount),
+  "/portfolio/social": s.countChannels(socialLinks.length),
+});
 
 const iconProps = {
   viewBox: "0 0 24 24",
@@ -73,9 +75,12 @@ const tileIcons: Record<string, ReactNode> = {
 
 export default function PortfolioMenu() {
   const [selected, setSelected] = useState(0);
+  const t = useT();
+  const s = useStrings();
+  const meta = tileMeta(s);
 
   return (
-    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-4 pt-20 pb-10 sm:px-8 lg:py-14">
+    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-4 pt-32 pb-10 sm:px-8 lg:pt-36 lg:pb-14">
       <BgWord word="NAVI" />
 
       <motion.div
@@ -95,7 +100,7 @@ export default function PortfolioMenu() {
             </span>
             <div className="min-w-0">
               <p className="neu-text text-3xl leading-none font-extrabold tracking-tight">Iván</p>
-              <p className="mt-2 eyebrow text-muted">Graduado en DAM</p>
+              <p className="mt-2 eyebrow text-muted">{s.graduated}</p>
             </div>
           </div>
 
@@ -103,14 +108,14 @@ export default function PortfolioMenu() {
             <p className="eyebrow text-center text-muted sm:hidden">{"/// ACTIONS ///"}</p>
             <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-6">
               {actionLinks.map((a) => (
-                <ActionButton key={a.name} link={a} />
+                <ActionButton key={a.icon} link={a} />
               ))}
             </div>
           </div>
         </motion.div>
 
         {/* Secciones */}
-        <nav aria-label="Menú principal">
+        <nav aria-label={s.mainMenu}>
           <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-8">
             {menuItems.map((m, i) => {
               const active = i === selected;
@@ -153,7 +158,7 @@ export default function PortfolioMenu() {
                       >
                         {tileIcons[m.url]}
                       </span>
-                      <span className="neu-inset-sm rounded-full px-3 py-1 eyebrow text-muted">{tileMeta[m.url]}</span>
+                      <span className="neu-inset-sm rounded-full px-3 py-1 eyebrow text-muted">{meta[m.url]}</span>
                     </div>
 
                     <div className="mt-auto pt-8">
@@ -162,7 +167,7 @@ export default function PortfolioMenu() {
                           active ? "lg:text-accent" : ""
                         }`}
                       >
-                        {m.title}
+                        {t(m.title)}
                       </span>
                       <span className="mt-2 flex items-center gap-3">
                         <span

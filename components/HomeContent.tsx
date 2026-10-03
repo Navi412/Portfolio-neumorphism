@@ -13,6 +13,7 @@ import {
 } from "@/components/HomeWidgets";
 import ContributionsWidget from "@/components/ContributionsWidget";
 import type { Contributions } from "@/lib/github";
+import { useStrings } from "@/lib/strings";
 
 const marqueeText =
   "SYSTEM.ACCESS // PORTFOLIO // IVÁN MARTÍN // SYSTEM.ACCESS // PORTFOLIO // IVÁN MARTÍN // ";
@@ -27,8 +28,9 @@ const scene: Variants = {
 
 /** Portada: presentación central rodeada de piezas neumórficas. */
 export default function HomeContent({ contributions }: { contributions: Contributions | null }) {
+  const s = useStrings();
   return (
-    <ParallaxScene className="flex min-h-screen flex-col px-4 pt-20 pb-10 sm:px-8 lg:justify-center lg:pt-24">
+    <ParallaxScene className="flex min-h-screen flex-col px-4 pt-32 pb-10 sm:px-8 lg:justify-center lg:pt-36">
       {/* Decorativo: texto de fondo en movimiento, en una ranura hundida */}
       <div
         aria-hidden="true"
@@ -58,11 +60,11 @@ export default function HomeContent({ contributions }: { contributions: Contribu
           <div className="flex flex-col items-center gap-2.5">
             <span className="neu-inset-sm inline-flex items-center gap-2 rounded-full px-4 py-1.5 eyebrow text-muted">
               <span className="glow h-2 w-2 animate-pulse rounded-full bg-amber-500 text-amber-500" aria-hidden="true" />
-              Cursando IA y Big Data
+              {s.studying}
             </span>
             <span className="neu-inset-sm inline-flex items-center gap-2 rounded-full px-4 py-1.5 eyebrow text-muted">
               <span className="glow h-2 w-2 rounded-full bg-accent text-accent" aria-hidden="true" />
-              Graduado en DAM
+              {s.graduated}
             </span>
           </div>
 
@@ -92,8 +94,8 @@ export default function HomeContent({ contributions }: { contributions: Contribu
             href="/portfolio"
             className="group neu-sm mt-10 inline-flex items-center gap-4 rounded-full py-2 pr-2 pl-7 text-sm font-bold tracking-[0.15em] uppercase transition-all hover:text-accent-ink active:neu-inset-sm"
           >
-            <span className="sm:hidden">ENTRAR</span>
-            <span className="hidden sm:inline">Entrar al Portfolio</span>
+            <span className="sm:hidden">{s.enterShort}</span>
+            <span className="hidden sm:inline">{s.enter}</span>
             <span
               aria-hidden="true"
               className="neu-accent flex h-11 w-11 items-center justify-center rounded-full transition-transform group-hover:translate-x-1"

@@ -3,12 +3,14 @@
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/ui";
 import { carta } from "@/lib/content";
+import { useStrings } from "@/lib/strings";
 
 const B = ({ children }: { children: React.ReactNode }) => (
   <strong className="font-bold text-accent-ink">{children}</strong>
 );
 
 export default function CartaPage() {
+  const s = useStrings();
   return (
     <PageShell bgWord="DOCS">
       <PageHeader
@@ -16,7 +18,7 @@ export default function CartaPage() {
         badge="VERIFIED FILE"
         hideBadgeOnMobile
         backHref="/portfolio"
-        backLabel="ATRÁS AL MENÚ"
+        backLabel={s.backToMenu}
       />
 
       <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -28,11 +30,19 @@ export default function CartaPage() {
           download={carta.pdfDownload}
           className="neu-accent self-start rounded-full px-6 py-3 text-xs font-bold tracking-[0.15em] transition-transform hover:-translate-y-0.5 sm:self-auto"
         >
-          DESCARGAR PDF ORIGINAL
+          {s.downloadPdf}
         </a>
       </div>
 
+      {/* En inglés: aviso de que la carta se muestra en su idioma original */}
+      {s.letterNote && (
+        <p className="mt-4 eyebrow text-accent-ink" lang="en">
+          {s.letterNote}
+        </p>
+      )}
+
       <motion.article
+        lang="es"
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.45 }}

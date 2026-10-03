@@ -3,11 +3,15 @@
 import { motion } from "framer-motion";
 import { inkColor, PageHeader, PageShell } from "@/components/ui";
 import { skillAccents, skillCategories } from "@/lib/content";
+import { useT } from "@/lib/i18n";
+import { useStrings } from "@/lib/strings";
 
 export default function HabilidadesPage() {
+  const t = useT();
+  const str = useStrings();
   return (
     <PageShell>
-      <PageHeader title="Arsenal Técnico" badge="SKILLS & PROFICIENCY" backHref="/portfolio" backLabel="ATRÁS" />
+      <PageHeader title={str.skillsTitle} badge="SKILLS & PROFICIENCY" backHref="/portfolio" backLabel={str.back} />
 
       <div className="mt-12 grid grid-cols-1 gap-10 xl:grid-cols-3">
         {skillCategories.map((cat, ci) => {
@@ -27,15 +31,15 @@ export default function HabilidadesPage() {
                 >
                   {cat.id}
                 </span>
-                <span className="eyebrow text-muted uppercase">{cat.subtitle}</span>
+                <span className="eyebrow text-muted uppercase">{t(cat.subtitle)}</span>
               </div>
-              <h2 className="mt-5 text-2xl font-extrabold tracking-tight sm:text-3xl">{cat.title}</h2>
+              <h2 className="mt-5 text-2xl font-extrabold tracking-tight sm:text-3xl">{t(cat.title)}</h2>
 
               <ul className="mt-8 flex flex-col gap-6">
                 {cat.skills.map((s, si) => (
-                  <li key={s.name}>
+                  <li key={s.level + t(s.name)}>
                     <div className="flex items-baseline justify-between gap-3">
-                      <span className="text-sm font-semibold">{s.name}</span>
+                      <span className="text-sm font-semibold">{t(s.name)}</span>
                       <span className="shrink-0 font-mono text-xs font-bold" style={{ color: inkColor(accent) }}>
                         <span className="hidden sm:inline">LVL {s.level}</span>
                         <span className="sm:hidden">{s.level}%</span>
@@ -44,7 +48,7 @@ export default function HabilidadesPage() {
                     <div
                       className="neu-inset-sm mt-3 h-3.5 w-full rounded-full p-[3px]"
                       role="progressbar"
-                      aria-label={s.name}
+                      aria-label={t(s.name)}
                       aria-valuenow={s.level}
                       aria-valuemin={0}
                       aria-valuemax={100}

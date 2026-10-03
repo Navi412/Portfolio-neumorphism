@@ -12,8 +12,7 @@ export default function Error({ error, retry }: { error: Error & { digest?: stri
     <ErrorScreen
       code="ERROR"
       log="SYS.LOG // SYSTEM_ERROR"
-      title="Algo ha fallado"
-      message="No se ha podido cargar esta página. Prueba a reintentarlo o vuelve al inicio."
+      variant="error"
       onRetry={retry}
     />
   );

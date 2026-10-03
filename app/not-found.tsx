@@ -10,8 +10,7 @@ export default function NotFound() {
     <ErrorScreen
       code="404"
       log="SYS.LOG // ROUTE_NOT_FOUND"
-      title="Página no encontrada"
-      message="La ruta que buscas no existe o se ha movido. Vuelve al inicio o entra directamente al menú."
+      variant="notFound"
     />
   );
 }

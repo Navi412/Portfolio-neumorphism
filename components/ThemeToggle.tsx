@@ -3,9 +3,9 @@
 import { motion, type Transition } from "framer-motion";
 import { useEffect, useSyncExternalStore } from "react";
 import { THEME_KEY as STORAGE_KEY } from "@/lib/initScripts";
+import { useStrings } from "@/lib/strings";
 
 type Theme = "light" | "dark";
-
 
 function subscribe(callback: () => void) {
   const observer = new MutationObserver(callback);
@@ -99,6 +99,7 @@ const stars = [
 export default function ThemeToggle() {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const isDark = theme === "dark";
+  const s = useStrings();
 
   // Si el usuario no ha elegido, seguir los cambios del sistema.
   useEffect(() => {
@@ -110,14 +111,14 @@ export default function ThemeToggle() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const label = isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro";
+  const label = isDark ? s.toLight : s.toDark;
 
   return (
     <button
       type="button"
       role="switch"
       aria-checked={isDark}
-      aria-label="Modo oscuro"
+      aria-label={s.themeLabel}
       title={label}
       onClick={(e) => {
         // La gota nace en el centro del interruptor.

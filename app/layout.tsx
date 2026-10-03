@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import BgDecor from "@/components/BgDecor";
+import LangToggle from "@/components/LangToggle";
 import ThemeToggle from "@/components/ThemeToggle";
-import { introInitScript, themeInitScript } from "@/lib/initScripts";
+import { introInitScript, langInitScript, themeInitScript } from "@/lib/initScripts";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"] });
@@ -16,17 +18,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    // suppressHydrationWarning: el script de tema añade data-theme antes de hidratar.
+    // suppressHydrationWarning: los scripts de <head> cambian data-theme y lang antes de hidratar.
     <html
       lang="es"
       className={`${jakarta.variable} ${jetbrains.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript + ";" + introInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: [themeInitScript, introInitScript, langInitScript].join(";") }} />
       </head>
       <body className="min-h-full overflow-x-hidden">
+        <BgDecor />
         <ThemeToggle />
+        <LangToggle />
         {children}
       </body>
     </html>

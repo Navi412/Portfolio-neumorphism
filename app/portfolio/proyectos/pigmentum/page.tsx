@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { PageHeader, PageShell, TagList } from "@/components/ui";
 import { pigmentum, projectAccents } from "@/lib/content";
+import { useT } from "@/lib/i18n";
+import { useStrings } from "@/lib/strings";
 
 const accent = projectAccents.pigmentum;
 const { gameUrl, tech } = pigmentum;
@@ -13,6 +15,8 @@ const overlayBtn =
   "neu-sm rounded-full px-4 py-2 eyebrow transition-all hover:text-accent-ink active:neu-inset-sm";
 
 export default function PigmentumPage() {
+  const t = useT();
+  const s = useStrings();
   const [isPlaying, setIsPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -32,26 +36,26 @@ export default function PigmentumPage() {
   return (
     <PageShell bgWord="INFILTRATION">
       <div style={{ "--accent": accent } as React.CSSProperties}>
-        <PageHeader title="Pigmentum" badge="UNITY // GAME" backHref="/portfolio/proyectos" backLabel="ATRÁS" />
+        <PageHeader title="Pigmentum" badge="UNITY // GAME" backHref="/portfolio/proyectos" backLabel={s.back} />
 
         {/* Zona de juego */}
-        <section aria-label="Zona de juego" className="neu-inset mt-12 rounded-[2rem] p-3 sm:p-4">
+        <section aria-label={s.gameArea} className="neu-inset mt-12 rounded-[2rem] p-3 sm:p-4">
           <div className="relative h-[60vh] min-h-[300px] w-full overflow-hidden rounded-3xl bg-black lg:h-[70vh] lg:min-h-[600px]">
             {isPlaying ? (
               <>
                 <iframe
                   ref={iframeRef}
                   src={gameUrl}
-                  title="Jugar Pigmentum"
+                  title={s.playTitle}
                   allowFullScreen
                   className="absolute inset-0 h-full w-full border-0"
                 />
                 <div className="absolute top-3 right-3 z-10 flex gap-3">
                   <button type="button" onClick={handleFullscreen} className={overlayBtn}>
-                    ⛶ AMPLIAR
+                    {s.fullscreen}
                   </button>
                   <button type="button" onClick={() => setIsPlaying(false)} className={overlayBtn}>
-                    ✖ CERRAR
+                    {s.closeGame}
                   </button>
                 </div>
               </>
@@ -59,7 +63,7 @@ export default function PigmentumPage() {
               <>
                 <Image
                   src="/pigmentum-bg.png"
-                  alt="Fondo de Pigmentum"
+                  alt={s.backgroundOf("Pigmentum")}
                   fill
                   sizes="(min-width: 1280px) 1200px, 100vw"
                   loading="eager"
@@ -73,7 +77,7 @@ export default function PigmentumPage() {
                     whileTap={{ scale: 0.97 }}
                     className="neu-accent rounded-full px-7 py-4 text-sm font-bold tracking-[0.18em] sm:px-10 sm:text-base"
                   >
-                    ▶ INICIAR INFILTRACIÓN
+                    {s.startGame}
                   </motion.button>
                 </div>
               </>
@@ -87,7 +91,7 @@ export default function PigmentumPage() {
             {pigmentum.label}
           </p>
           <div>
-            <p className="max-w-3xl text-lg leading-relaxed">{pigmentum.desc}</p>
+            <p className="max-w-3xl text-lg leading-relaxed">{t(pigmentum.desc)}</p>
             <div className="mt-6">
               <TagList tags={tech} accent={accent} />
             </div>

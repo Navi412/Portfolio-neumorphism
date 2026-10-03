@@ -5,11 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageHeader, PageShell, TagList } from "@/components/ui";
 import { projectAccents, proyectos } from "@/lib/content";
+import { useT } from "@/lib/i18n";
+import { useStrings } from "@/lib/strings";
 
 export default function ProyectosPage() {
+  const t = useT();
+  const s = useStrings();
   return (
     <PageShell bgWord="INFILTRATION">
-      <PageHeader title="Log de Proyectos" badge="PROYECTOS Y DESARROLLOS" backHref="/portfolio" backLabel="ATRÁS" />
+      <PageHeader title={s.projectsTitle} badge={s.projectsBadge} backHref="/portfolio" backLabel={s.back} />
 
       <div className="mt-12 flex flex-col gap-10">
         {proyectos.map((p, i) => {
@@ -33,7 +37,7 @@ export default function ProyectosPage() {
                       <div className="flex h-full min-h-48 w-full items-center justify-center p-6">
                         <Image
                           src={p.imageUrl}
-                          alt={`Icono de ${p.title}`}
+                          alt={s.iconOf(p.title)}
                           width={160}
                           height={160}
                           unoptimized
@@ -43,7 +47,7 @@ export default function ProyectosPage() {
                     ) : p.imageUrl ? (
                       <Image
                         src={p.imageUrl}
-                        alt={`Fondo de ${p.title}`}
+                        alt={s.backgroundOf(p.title)}
                         fill
                         sizes="(min-width: 1024px) 55vw, 100vw"
                         className="object-cover object-top lg:transition-transform lg:duration-500 lg:group-hover:scale-105"
@@ -65,12 +69,21 @@ export default function ProyectosPage() {
                     <span className="text-muted">{p.type}</span>
                   </div>
                   <h2 className="neu-text mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl">{p.title}</h2>
-                  <p className="mt-4 leading-relaxed text-muted">{p.desc}</p>
+                  {p.enDesarrollo && (
+                    <span
+                      className="neu-inset-sm mt-4 flex items-center gap-2 self-start rounded-full px-3 py-1 eyebrow text-accent-ink"
+                      style={{ "--accent": "#f59e0b" } as React.CSSProperties}
+                    >
+                      <span aria-hidden>🚧</span>
+                      {s.inDev}
+                    </span>
+                  )}
+                  <p className="mt-4 leading-relaxed text-muted">{t(p.desc)}</p>
                   <div className="mt-6">
                     <TagList tags={p.tech} accent={accent} />
                   </div>
                   <span className="neu-accent mt-8 self-start rounded-full px-6 py-3 text-xs font-bold tracking-[0.18em] transition-transform lg:group-hover:translate-x-1.5">
-                    ▶ VER PROYECTO
+                    {s.seeProject}
                   </span>
                 </div>
               </Link>

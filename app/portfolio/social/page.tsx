@@ -3,17 +3,21 @@
 import { motion } from "framer-motion";
 import { PageHeader, PageShell } from "@/components/ui";
 import { phone, socialLinks } from "@/lib/content";
+import { useT } from "@/lib/i18n";
+import { useStrings } from "@/lib/strings";
 
 export default function SocialPage() {
+  const t = useT();
+  const str = useStrings();
   return (
     <PageShell>
-      <PageHeader title="Social Link" badge="CONTACTEMOS" backHref="/portfolio" backLabel="REGRESAR" />
+      <PageHeader title="Social Link" badge={str.socialBadge} backHref="/portfolio" backLabel={str.goBack} />
 
       <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-2">
         {socialLinks.map((s, i) => (
           <motion.a
             key={s.id}
-            href={s.url}
+            href={t(s.url)}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, y: 24 }}
@@ -31,10 +35,10 @@ export default function SocialPage() {
                 STATUS: ACTIVE
               </span>
             </div>
-            <h2 className="neu-text mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">{s.name}</h2>
-            <p className="mt-4 flex-1 leading-relaxed text-muted">{s.description}</p>
+            <h2 className="neu-text mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">{t(s.name)}</h2>
+            <p className="mt-4 flex-1 leading-relaxed text-muted">{t(s.description)}</p>
             <span className="neu-sm mt-8 self-start rounded-full px-6 py-3 text-xs font-bold tracking-[0.2em] transition-all group-hover:text-accent-ink">
-              CONTACTAR
+              {str.contact}
             </span>
           </motion.a>
         ))}

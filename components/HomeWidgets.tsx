@@ -14,6 +14,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { actionLinks, estudios, proyectos, skillCategories, type ActionLink } from "@/lib/content";
+import { useT } from "@/lib/i18n";
+import { useStrings } from "@/lib/strings";
 
 /* ---------- Profundidad con el ratón ---------- */
 
@@ -88,9 +90,12 @@ export function SkillDial() {
   }, [reduce]);
 
   const skill = allSkills[index];
+  const t = useT();
+  const s = useStrings();
+  const name = t(skill.name);
 
   return (
-    <Link href="/portfolio/habilidades" className={`${cardLink} items-center`} aria-label="Ver habilidades">
+    <Link href="/portfolio/habilidades" className={`${cardLink} items-center`} aria-label={s.viewSkills}>
       <div className="flex w-full items-center justify-between">
         <span className="eyebrow text-muted">Technical Skills</span>
         <span className="glow h-2 w-2 rounded-full bg-accent text-accent" aria-hidden="true" />
@@ -116,7 +121,7 @@ export function SkillDial() {
           <div className="text-center">
             <AnimatePresence mode="wait">
               <motion.p
-                key={skill.name}
+                key={index}
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
@@ -134,14 +139,14 @@ export function SkillDial() {
       <div className="relative h-6 w-full overflow-hidden text-center">
         <AnimatePresence mode="wait">
           <motion.p
-            key={skill.name}
+            key={name}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
             className="text-sm font-bold"
           >
-            {skill.name}
+            {name}
           </motion.p>
         </AnimatePresence>
       </div>
@@ -154,14 +159,15 @@ export function SkillDial() {
 const pigmentum = proyectos[0];
 
 export function ProjectWidget() {
+  const s = useStrings();
   return (
-    <Link href={`/portfolio/proyectos/${pigmentum.slug}`} className={cardLink} aria-label={`Ver proyecto ${pigmentum.title}`}>
+    <Link href={`/portfolio/proyectos/${pigmentum.slug}`} className={cardLink} aria-label={s.viewProject(pigmentum.title)}>
       <div className="neu-inset rounded-3xl p-2">
         <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-black">
           {pigmentum.imageUrl && (
             <Image
               src={pigmentum.imageUrl}
-              alt={`Fondo de ${pigmentum.title}`}
+              alt={s.backgroundOf(pigmentum.title)}
               fill
               sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
               className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -190,8 +196,10 @@ export function ProjectWidget() {
 const current = estudios.find((e) => e.enCurso) ?? estudios[0];
 
 export function StudyWidget() {
+  const t = useT();
+  const s = useStrings();
   return (
-    <Link href="/portfolio/estudios" className={cardLink} aria-label="Ver estudios">
+    <Link href="/portfolio/estudios" className={cardLink} aria-label={s.viewStudies}>
       <div className="flex items-center justify-between gap-3">
         <span className="neu-inset-sm inline-flex items-center gap-2 rounded-full px-3 py-1.5 eyebrow">
           <span
@@ -200,16 +208,16 @@ export function StudyWidget() {
             }`}
             aria-hidden="true"
           />
-          {current.status}
+          {t(current.status)}
         </span>
         <span className="eyebrow text-muted">{current.fecha}</span>
       </div>
-      <p className="mt-5 text-lg leading-snug font-extrabold tracking-tight">{current.title}</p>
-      <p className="mt-2 text-sm text-muted">{current.centro.split(" · ")[0]}</p>
+      <p className="mt-5 text-lg leading-snug font-extrabold tracking-tight">{t(current.title)}</p>
+      <p className="mt-2 text-sm text-muted">{t(current.centro).split(" · ")[0]}</p>
       <div className="mt-auto flex flex-wrap gap-2 pt-5">
-        {current.tags.slice(0, 2).map((t) => (
-          <span key={t} className="neu-sm rounded-full px-3 py-1 text-xs font-semibold text-muted">
-            {t}
+        {t(current.tags).slice(0, 2).map((tag) => (
+          <span key={tag} className="neu-sm rounded-full px-3 py-1 text-xs font-semibold text-muted">
+            {tag}
           </span>
         ))}
       </div>
@@ -219,15 +227,15 @@ export function StudyWidget() {
 
 /* ---------- Accesos directos ---------- */
 
-const icons: Record<string, ReactNode> = {
-  GITHUB: <path d="M8 7 3 12l5 5M16 7l5 5-5 5M14 4l-4 16" />,
-  CURRICULUM: (
+const icons: Record<ActionLink["icon"], ReactNode> = {
+  github: <path d="M8 7 3 12l5 5M16 7l5 5-5 5M14 4l-4 16" />,
+  cv: (
     <>
       <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
       <path d="M14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" />
     </>
   ),
-  "CARTA RECOMEND.": (
+  letter: (
     <>
       <rect x="3" y="5" width="18" height="14" rx="2" />
       <path d="m3 7 9 6 9-6" />
@@ -236,6 +244,7 @@ const icons: Record<string, ReactNode> = {
 };
 
 export function ActionButton({ link }: { link: ActionLink }) {
+  const t = useT();
   const inner = (
     <>
       <span className="neu-sm flex h-14 w-14 items-center justify-center rounded-full text-muted transition-all duration-300 group-hover:text-accent group-active:neu-inset-sm">
@@ -249,11 +258,11 @@ export function ActionButton({ link }: { link: ActionLink }) {
           strokeLinejoin="round"
           aria-hidden="true"
         >
-          {icons[link.name]}
+          {icons[link.icon]}
         </svg>
       </span>
       <span className="eyebrow text-center text-[0.7rem] text-muted transition-colors group-hover:text-accent-ink">
-        {link.name}
+        {t(link.name)}
       </span>
     </>
   );
@@ -286,7 +295,7 @@ export function ActionsWidget() {
       <p className="eyebrow mb-5 text-center text-muted">{"/// ACTIONS ///"}</p>
       <div className="grid grid-cols-3 gap-2">
         {actionLinks.map((a) => (
-          <ActionButton key={a.name} link={a} />
+          <ActionButton key={a.icon} link={a} />
         ))}
       </div>
     </div>
