@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { DevAlert } from "@/components/dev-alert";
 import { PageHeader, PageShell, TagList } from "@/components/ui";
 import { backlog, projectAccents } from "@/lib/content";
 import { useLang, useT } from "@/lib/i18n";
@@ -27,6 +28,8 @@ export default function BacklogPage() {
           backHref="/portfolio/proyectos"
           backLabel={s.back}
         />
+
+        <DevAlert />
 
         {/* 1. Presentación */}
         <motion.section

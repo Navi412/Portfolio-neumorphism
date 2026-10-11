@@ -178,6 +178,7 @@ export const proyectos: Proyecto[] = [
     },
     imageUrl: "/backlog-tarjeta-limpia.png",
     imagePlaceholder: "BACKLOG_APP.PNG",
+    enDesarrollo: true,
   },
   {
     id: "03",
@@ -205,6 +206,7 @@ export const proyectos: Proyecto[] = [
     },
     imageUrl: undefined,
     imagePlaceholder: "PIXEL_ART_EDITOR.GIF",
+    enDesarrollo: true,
   },
 ];
 

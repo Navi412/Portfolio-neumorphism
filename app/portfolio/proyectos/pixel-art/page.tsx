@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { DevAlert } from "@/components/dev-alert";
 import { PageHeader, PageShell, TagList } from "@/components/ui";
 import { pixelArt, projectAccents } from "@/lib/content";
 import { useT } from "@/lib/i18n";
@@ -21,6 +22,8 @@ export default function PixelArtPage() {
           backHref="/portfolio/proyectos"
           backLabel={s.back}
         />
+
+        <DevAlert />
 
         {/* 1. Presentación */}
         <motion.section
