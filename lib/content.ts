@@ -193,6 +193,19 @@ export const proyectos: Proyecto[] = [
     imagePlaceholder: "APP_VIDEO.MP4",
     enDesarrollo: true,
   },
+  {
+    id: "04",
+    slug: "pixel-art",
+    title: "Editor de píxel art",
+    type: "APP // WEB & DESKTOP",
+    tech: ["JavaScript", "Canvas 2D", "Electron", "node:test"],
+    desc: {
+      es: "Editor de píxel art completo que funciona en el navegador y como app de escritorio. JavaScript puro (ES modules), sin frameworks ni dependencias, sobre Canvas 2D. Con capas, animación por fotogramas, deshacer/rehacer y exportación a PNG, spritesheet y GIF con un codificador propio.",
+      en: "Full pixel art editor that runs in the browser and as a desktop app. Plain JavaScript (ES modules), no frameworks or dependencies, on Canvas 2D. With layers, frame animation, undo/redo and export to PNG, spritesheet and GIF using my own encoder.",
+    },
+    imageUrl: undefined,
+    imagePlaceholder: "PIXEL_ART_EDITOR.GIF",
+  },
 ];
 
 /** Color de acento propio de cada proyecto (se reutiliza en su detalle). */
@@ -200,6 +213,7 @@ export const projectAccents: Record<string, string> = {
   pigmentum: "#a855f7",
   backlog: "#3b82f6",
   "app-video": "#f43f5e",
+  "pixel-art": "#14b8a6",
 };
 
 export const pigmentum = {
@@ -351,6 +365,115 @@ export const appVideo = {
       "More editing and color features.",
     ],
   } satisfies Loc<string[]>,
+};
+
+export const pixelArt = {
+  tech: ["JavaScript (ES modules)", "Canvas 2D", "HTML/CSS", "localStorage", "Electron", "node:test"],
+  intro: {
+    es: "Un editor para dibujar sprites e ilustraciones pixeladas, y también animaciones fotograma a fotograma, escrito en JavaScript puro.",
+    en: "An editor for drawing sprites and pixel illustrations, and frame-by-frame animations too, written in plain JavaScript.",
+  } satisfies Text,
+  label: { es: "EDITOR DE PÍXEL ART", en: "PIXEL ART EDITOR" } satisfies Text,
+  desc: {
+    es: "Abres la app, eliges el tamaño del lienzo y dibujas. Todo se guarda automáticamente en local, sin cuentas ni servidor. Lo construí como ejercicio de ingeniería sin frameworks: quería entender y controlar cada capa, desde el render y el estado hasta el historial, la serialización y la codificación de formatos.",
+    en: "Open the app, pick a canvas size and draw. Everything is saved automatically in local storage, with no accounts or server. I built it as a no-framework engineering exercise: I wanted to understand and control every layer, from rendering and state to history, serialization and format encoding.",
+  } satisfies Text,
+  funcionalidades: {
+    es: [
+      "Lápiz y goma con grosor ajustable, dibujo con espejo (simetría), cubo de relleno y cuentagotas.",
+      "Líneas, rectángulos y elipses con relleno y ajustes con Mayús (cuadrados y círculos perfectos), con vista previa de la huella bajo el puntero.",
+      "Selección rectangular movible: copiar, cortar, pegar, borrar, rellenar y voltear, con los atajos de teclado habituales.",
+      "Capas: añadir, borrar, reordenar, ocultar, renombrar, opacidad y fundir hacia abajo.",
+      "Animación con línea de tiempo de fotogramas, fotograma vacío y reordenación arrastrando.",
+      "Varios proyectos guardados en paralelo: crear, cambiar, renombrar y eliminar.",
+      "Exportación a PNG, spritesheet y GIF animado, de ×1 a ×16.",
+      "Funciona sin conexión: las fuentes son locales y no hay dependencias en runtime.",
+    ],
+    en: [
+      "Pencil and eraser with adjustable size, mirror (symmetry) drawing, fill bucket and eyedropper.",
+      "Lines, rectangles and ellipses with fill and Shift modifiers (perfect squares and circles), with a footprint preview under the pointer.",
+      "Movable rectangular selection: copy, cut, paste, delete, fill and flip, with the usual keyboard shortcuts.",
+      "Layers: add, delete, reorder, hide, rename, opacity and merge down.",
+      "Animation with a frame timeline, empty frames and drag-to-reorder.",
+      "Several projects saved side by side: create, switch, rename and delete.",
+      "Export to PNG, spritesheet and animated GIF, from ×1 to ×16.",
+      "Works offline: fonts are local and there are no runtime dependencies.",
+    ],
+  } satisfies Loc<string[]>,
+  decisiones: {
+    es: [
+      {
+        title: "Estado separado de la vista",
+        text: "Los píxeles viven en arrays Uint8ClampedArray (RGBA) y el canvas es solo salida: se re-renderiza componiendo las capas. La UI nunca toca píxeles directamente.",
+      },
+      {
+        title: "Undo/redo con comandos",
+        text: "Toda mutación pasa por comandos con do/undo. Un trazo completo es un único comando, y los movimientos del ratón se interpolan con un algoritmo de línea para no dejar huecos.",
+      },
+      {
+        title: "Un único historial por proyecto",
+        text: "Una sola pila mezcla trazos y cambios estructurales (capas, fotogramas, tamaño). Deshacer funciona en orden y es seguro incluso después de redimensionar el lienzo.",
+      },
+      {
+        title: "Herramientas como módulos",
+        text: "Cada herramienta implementa una interfaz común (puntero abajo, mover, arriba, y opcionalmente vista previa y cursor). Añadir una no obliga a tocar el binding de eventos.",
+      },
+      {
+        title: "Núcleo puro y con tests",
+        text: "Geometría, composición de capas, historial y serialización son funciones puras que se prueban con node:test, sin necesidad de navegador.",
+      },
+      {
+        title: "Codificador GIF89a propio",
+        text: "Paleta, compresión LZW, transparencia y bucle implementados a mano, sin librerías externas.",
+      },
+      {
+        title: "Serialización compacta",
+        text: "El proyecto se guarda como JSON con los píxeles en RLE + base64, y sigue leyendo el formato antiguo sin RLE para que los proyectos guardados no se rompan.",
+      },
+      {
+        title: "UI modular",
+        text: "main.js es solo el punto de composición. Cada subsistema sigue el patrón createX(elementos, opciones) y recibe getters en lugar de valores, para cambiar de fotograma o zoom sin tocar el resto.",
+      },
+    ],
+    en: [
+      {
+        title: "State separated from the view",
+        text: "Pixels live in Uint8ClampedArray (RGBA) arrays and the canvas is output only: it re-renders by compositing the layers. The UI never touches pixels directly.",
+      },
+      {
+        title: "Undo/redo with commands",
+        text: "Every mutation goes through commands with do/undo. A full stroke is a single command, and mouse movements are interpolated with a line algorithm so no gaps are left.",
+      },
+      {
+        title: "One history per project",
+        text: "A single stack mixes strokes and structural changes (layers, frames, size). Undo works in order and stays safe even after resizing the canvas.",
+      },
+      {
+        title: "Tools as modules",
+        text: "Each tool implements a common interface (pointer down, move, up, and optionally preview and cursor). Adding one doesn't require touching the event binding.",
+      },
+      {
+        title: "Pure, tested core",
+        text: "Geometry, layer compositing, history and serialization are pure functions tested with node:test, no browser needed.",
+      },
+      {
+        title: "Own GIF89a encoder",
+        text: "Palette, LZW compression, transparency and looping implemented by hand, with no external libraries.",
+      },
+      {
+        title: "Compact serialization",
+        text: "Projects are saved as JSON with pixels in RLE + base64, and the old non-RLE format is still read so saved projects keep working.",
+      },
+      {
+        title: "Modular UI",
+        text: "main.js is just the composition point. Each subsystem follows the createX(elements, options) pattern and receives getters instead of values, so frame or zoom can change without touching the rest.",
+      },
+    ],
+  } satisfies Loc<{ title: string; text: string }[]>,
+  escritorio: {
+    es: "La misma app corre dentro de Electron sin ningún cambio en el código de la aplicación. Un pequeño servidor HTTP local, hecho solo con módulos nativos de Node, sirve los archivos: hace falta porque Chromium bloquea por CORS los módulos ES cargados desde file://.",
+    en: "The same app runs inside Electron with no changes to the application code. A small local HTTP server, built with Node's native modules only, serves the files: it's needed because Chromium blocks ES modules loaded from file:// through CORS.",
+  } satisfies Text,
 };
 
 /* ---------- Habilidades ---------- */
