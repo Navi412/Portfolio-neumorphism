@@ -29,6 +29,25 @@ export type Estudio = {
   enCurso?: boolean;
 };
 
+/** Curso corto o certificación (columna aparte en Estudios, con página propia en /portfolio/estudios/[id]). */
+export type Curso = {
+  id: string;
+  title: Text;
+  proveedor: string;
+  fecha: Text;
+  desc: Text;
+  tags: Loc<string[]>;
+  /** Lo aprendido o en lo que se trabaja; se omite la sección si no hay. */
+  aprendizajes?: Loc<string[]>;
+  /** Qué aporta el curso al perfil; se omite la sección si no hay. */
+  aporta?: Text;
+  /** Certificado en PDF (en public/), si lo hay. */
+  url?: string;
+  /** Enlace público para verificar el certificado o la insignia. */
+  verifyUrl?: string;
+  enCurso?: boolean;
+};
+
 export type Proyecto = {
   id: string;
   slug: string;
@@ -64,14 +83,35 @@ export type SocialLink = {
 /* ---------- Menú principal ---------- */
 
 export const menuItems: MenuItem[] = [
-  { title: { es: "PROYECTOS", en: "PROJECTS" }, subtitle: "Infiltrations & Apps", url: "/portfolio/proyectos" },
-  { title: { es: "ESTUDIOS", en: "EDUCATION" }, subtitle: "Academic Stats", url: "/portfolio/estudios" },
-  { title: { es: "HABILIDADES", en: "SKILLS" }, subtitle: "Technical Skills", url: "/portfolio/habilidades" },
-  { title: "SOCIAL LINK", subtitle: "Contact & Network", url: "/portfolio/social" },
+  {
+    title: { es: "PROYECTOS", en: "PROJECTS" },
+    subtitle: "Infiltrations & Apps",
+    url: "/portfolio/proyectos",
+  },
+  {
+    title: { es: "ESTUDIOS", en: "EDUCATION" },
+    subtitle: "Academic Stats",
+    url: "/portfolio/estudios",
+  },
+  {
+    title: { es: "HABILIDADES", en: "SKILLS" },
+    subtitle: "Technical Skills",
+    url: "/portfolio/habilidades",
+  },
+  {
+    title: "SOCIAL LINK",
+    subtitle: "Contact & Network",
+    url: "/portfolio/social",
+  },
 ];
 
 export const actionLinks: ActionLink[] = [
-  { name: "GITHUB", icon: "github", url: "https://github.com/Navi412", isExternal: true },
+  {
+    name: "GITHUB",
+    icon: "github",
+    url: "https://github.com/Navi412",
+    isExternal: true,
+  },
   {
     name: { es: "CURRICULUM", en: "RESUME" },
     icon: "cv",
@@ -79,7 +119,12 @@ export const actionLinks: ActionLink[] = [
     isExternal: true,
     download: "Curriculum Vitae CV Iván Martín Vallejo.pdf",
   },
-  { name: { es: "CARTA RECOMEND.", en: "REFERENCE" }, icon: "letter", url: "/portfolio/carta", isExternal: false },
+  {
+    name: { es: "CARTA RECOMEND.", en: "REFERENCE" },
+    icon: "letter",
+    url: "/portfolio/carta",
+    isExternal: false,
+  },
 ];
 
 /* ---------- Estudios ---------- */
@@ -116,8 +161,14 @@ export const estudios: Estudio[] = [
   },
   {
     id: "02",
-    title: { es: "DESARROLLO DE APLICACIONES MULTIPLATAFORMA", en: "MULTIPLATFORM APPLICATION DEVELOPMENT" },
-    subtitle: { es: "GRADO SUPERIOR (DAM)", en: "HIGHER VOCATIONAL DEGREE (DAM)" },
+    title: {
+      es: "DESARROLLO DE APLICACIONES MULTIPLATAFORMA",
+      en: "MULTIPLATFORM APPLICATION DEVELOPMENT",
+    },
+    subtitle: {
+      es: "GRADO SUPERIOR (DAM)",
+      en: "HIGHER VOCATIONAL DEGREE (DAM)",
+    },
     status: COMPLETADO,
     centro: "iFP - Innovación en Formación Profesional",
     fecha: "2024 - 2026",
@@ -133,8 +184,14 @@ export const estudios: Estudio[] = [
   },
   {
     id: "03",
-    title: { es: "BACHILLERATO EN CIENCIAS SOCIALES", en: "HIGH SCHOOL DIPLOMA IN SOCIAL SCIENCES" },
-    subtitle: { es: "EDUCACIÓN SECUNDARIA POSTOBLIGATORIA", en: "UPPER SECONDARY EDUCATION" },
+    title: {
+      es: "BACHILLERATO EN CIENCIAS SOCIALES",
+      en: "HIGH SCHOOL DIPLOMA IN SOCIAL SCIENCES",
+    },
+    subtitle: {
+      es: "EDUCACIÓN SECUNDARIA POSTOBLIGATORIA",
+      en: "UPPER SECONDARY EDUCATION",
+    },
     status: COMPLETADO,
     centro: "Colegio Guzmán el Bueno",
     fecha: "2023 - 2024",
@@ -147,6 +204,52 @@ export const estudios: Estudio[] = [
       en: ["Mathematics", "Physics", "Industrial Technology"],
     },
     logo: "/logo-bachiller.png",
+  },
+];
+
+/* ---------- Cursos ---------- */
+
+export const cursos: Curso[] = [
+  {
+    id: "claude-code-in-action",
+    title: "Claude Code in Action",
+    proveedor: "Anthropic",
+    fecha: { es: "Nov. 2026", en: "Nov 2026" },
+    desc: {
+      es: "Curso oficial y gratuito de Anthropic sobre Claude Code, una herramienta de programación con IA que trabaja desde la terminal: lee los archivos del proyecto, ejecuta comandos y modifica código mediante un sistema de herramientas. Enseña a integrarlo en el flujo de desarrollo real y a confiar en su resultado.",
+      en: "Anthropic's official free course on Claude Code, an AI coding tool that works from the terminal: it reads project files, runs commands and edits code through a system of tools. It teaches how to fit it into a real development workflow and how to trust its output.",
+    },
+    tags: { es: ["Claude Code", "MCP", "Hooks", "GitHub Actions"], en: ["Claude Code", "MCP", "Hooks", "GitHub Actions"] },
+    aprendizajes: {
+      es: [
+        "Cómo funciona un asistente de programación: usa herramientas para analizar y modificar código, y las combina en tareas de varios pasos.",
+        "Gestión del contexto: dar a la IA la información adecuada del proyecto y mantenerla controlada en sesiones largas (resumir con /compact, rebobinar para corregir el rumbo).",
+        "Modos de planificación y razonamiento: modo plan para cambios grandes y nivel de razonamiento según la complejidad.",
+        "Automatización personalizada: comandos propios para tareas repetitivas.",
+        "Extensiones con MCP: conectar Claude Code a herramientas externas, como la automatización de navegador.",
+        "Hooks: reglas y acciones automáticas en momentos concretos del flujo, que la IA no puede saltarse.",
+        "Integración con GitHub: revisión automática de pull requests y flujos con GitHub Actions.",
+        "SDK y modo sin interfaz (headless): usar Claude Code dentro de aplicaciones o pipelines propios.",
+        "Verificación: comprobar siempre lo que ha hecho la IA, sobre todo cuando trabaja sin supervisión.",
+      ],
+      en: [
+        "How a coding assistant works: it uses tools to analyze and edit code, and chains them into multi-step tasks.",
+        "Context management: giving the AI the right project information and keeping it under control in long sessions (summarizing with /compact, rewinding to correct course).",
+        "Planning and reasoning modes: plan mode for large changes and a reasoning level that fits the complexity.",
+        "Custom automation: my own commands for repetitive tasks.",
+        "MCP extensions: connecting Claude Code to external tools, such as browser automation.",
+        "Hooks: automatic rules and actions at specific points in the workflow that the AI can't bypass.",
+        "GitHub integration: automated pull request reviews and GitHub Actions workflows.",
+        "SDK and headless mode: using Claude Code inside my own apps or pipelines.",
+        "Verification: always checking what the AI has done, especially when it works unsupervised.",
+      ],
+    },
+    aporta: {
+      es: "Me permite trabajar con IA como apoyo en el desarrollo (Java, SQL, JavaScript, Unity), mantener buenas prácticas con Git y GitHub y automatizar tareas repetitivas, siempre revisando y entendiendo el código generado.",
+      en: "It lets me use AI as support in development (Java, SQL, JavaScript, Unity), keep good practices with Git and GitHub and automate repetitive tasks, always reviewing and understanding the generated code.",
+    },
+    url: "/claude-academy-badge-claude-code-in-action.pdf",
+    verifyUrl: "https://academy.claude.com/verify/03e8e4970cc4641851fa8ce18fb7f53b",
   },
 ];
 
@@ -267,15 +370,24 @@ export const appVideo = {
     es: "Un editor de vídeo no lineal (NLE) de escritorio, inspirado en DaVinci Resolve y Premiere, construido desde cero.",
     en: "A desktop non-linear video editor (NLE), inspired by DaVinci Resolve and Premiere, built from scratch.",
   } satisfies Text,
-  label: { es: "EDITOR DE VÍDEO (NLE)", en: "VIDEO EDITOR (NLE)" } satisfies Text,
+  label: {
+    es: "EDITOR DE VÍDEO (NLE)",
+    en: "VIDEO EDITOR (NLE)",
+  } satisfies Text,
   desc: {
     es: "Funciona sobre tecnologías web modernas y se empaqueta como aplicación nativa con Electron. El objetivo es que se use como un editor de escritorio de verdad, no como una web metida en una ventana.",
     en: "It runs on modern web technologies and is packaged as a native app with Electron. The goal is for it to feel like a real desktop editor, not a website stuck inside a window.",
   } satisfies Text,
   stats: [
-    { value: "~8.200", label: { es: "líneas de TypeScript", en: "lines of TypeScript" } },
+    {
+      value: "~8.200",
+      label: { es: "líneas de TypeScript", en: "lines of TypeScript" },
+    },
     { value: "153", label: { es: "tests automáticos", en: "automated tests" } },
-    { value: "12", label: { es: "commits desde ago. 2026", en: "commits since Aug 2026" } },
+    {
+      value: "12",
+      label: { es: "commits desde ago. 2026", en: "commits since Aug 2026" },
+    },
   ] satisfies { value: string; label: Text }[],
   funcionalidades: {
     es: [
@@ -500,7 +612,13 @@ export const skillCategories: SkillCategory[] = [
       { name: "Next.js & React", level: 95 },
       { name: "Angular", level: 80 },
       { name: "Tailwind CSS", level: 90 },
-      { name: { es: "Git & GitLab (Versiones)", en: "Git & GitLab (Versioning)" }, level: 85 },
+      {
+        name: {
+          es: "Git & GitLab (Versiones)",
+          en: "Git & GitLab (Versioning)",
+        },
+        level: 85,
+      },
     ],
   },
   {

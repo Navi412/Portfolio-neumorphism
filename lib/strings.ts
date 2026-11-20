@@ -53,6 +53,16 @@ const es = {
 
   // Estudios / proyectos
   logoOf: (name: string) => `Logo de ${name}`,
+  coursesTitle: "Cursos",
+  viewCertificate: "Ver certificado ↗",
+  courseStatus: (inProgress: boolean): string => (inProgress ? "En curso" : "Completado"),
+  whatILearn: (inProgress: boolean): string => (inProgress ? "Qué estoy aprendiendo" : "Qué aprendí"),
+  whatItGivesMe: "Qué aporta a mi perfil",
+  courseInfo: "Ficha",
+  provider: "Impartido por",
+  date: "Fecha",
+  status: "Estado",
+  verifyBadge: "Verificar insignia ↗",
   backgroundOf: (name: string) => `Fondo de ${name}`,
   iconOf: (name: string) => `Icono de ${name}`,
   seeProject: "▶ VER PROYECTO",
@@ -73,8 +83,7 @@ const es = {
   // App Video
   inDev: "EN DESARROLLO",
   devAlertTitle: "En desarrollo",
-  devAlertText:
-    "Es un proyecto activo: añado funciones de forma continua y algunas partes aún son experimentales.",
+  devAlertText: "Es un proyecto activo: añado funciones de forma continua y algunas partes aún son experimentales.",
   featuresToday: "Qué puede hacer hoy",
   archDecisions: "Decisiones de arquitectura",
   nextSteps: "Próximos pasos",
@@ -144,6 +153,16 @@ const en: Strings = {
   socialBadge: "LET'S TALK",
 
   logoOf: (name) => `${name} logo`,
+  coursesTitle: "Courses",
+  viewCertificate: "View certificate ↗",
+  courseStatus: (inProgress) => (inProgress ? "In progress" : "Completed"),
+  whatILearn: (inProgress) => (inProgress ? "What I'm learning" : "What I learned"),
+  whatItGivesMe: "What it adds to my profile",
+  courseInfo: "Details",
+  provider: "Offered by",
+  date: "Date",
+  status: "Status",
+  verifyBadge: "Verify badge ↗",
   backgroundOf: (name) => `${name} background`,
   iconOf: (name) => `${name} icon`,
   seeProject: "▶ VIEW PROJECT",
