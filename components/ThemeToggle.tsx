@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, type Transition } from "framer-motion";
-import { useEffect, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { THEME_KEY as STORAGE_KEY } from "@/lib/initScripts";
 import { useStrings } from "@/lib/strings";
 
@@ -15,15 +15,6 @@ function subscribe(callback: () => void) {
 
 const getSnapshot = () => (document.documentElement.dataset.theme as Theme | undefined) ?? null;
 const getServerSnapshot = () => null;
-
-function readStored(): Theme | null {
-  try {
-    const t = localStorage.getItem(STORAGE_KEY);
-    return t === "light" || t === "dark" ? t : null;
-  } catch {
-    return null;
-  }
-}
 
 /**
  * Cambia el tema con una "gota": el navegador hace una captura de la vista actual,
@@ -100,16 +91,6 @@ export default function ThemeToggle() {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const isDark = theme === "dark";
   const s = useStrings();
-
-  // Si el usuario no ha elegido, seguir los cambios del sistema.
-  useEffect(() => {
-    const mq = matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      if (!readStored()) applyTheme(mq.matches ? "dark" : "light", false);
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
 
   const label = isDark ? s.toLight : s.toDark;
 

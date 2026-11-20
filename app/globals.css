@@ -15,20 +15,7 @@
   color-scheme: light;
 }
 
-/* Oscuro: gris y azul */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #2a2d32;
-    --fg: #e4e7ec;
-    --muted: #a1a7b1;
-    --sh-light: #35393f;
-    --sh-dark: #1b1d21;
-    --accent: #4d82ff;
-    --ink-l: 0.78;
-    color-scheme: dark;
-  }
-}
-
+/* Oscuro: gris y azul. Solo si el usuario lo elige: la primera visita es siempre en claro. */
 :root[data-theme="dark"] {
   --bg: #2a2d32;
   --fg: #e4e7ec;
@@ -169,7 +156,7 @@ body {
 }
 
 .marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 120s linear infinite;
 }
 
 /* Columnas del gráfico de GitHub: aparecen de izquierda a derecha */

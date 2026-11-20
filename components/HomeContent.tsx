@@ -15,8 +15,9 @@ import ContributionsWidget from "@/components/ContributionsWidget";
 import type { Contributions } from "@/lib/github";
 import { useStrings } from "@/lib/strings";
 
-const marqueeText =
-  "SYSTEM.ACCESS // PORTFOLIO // IVÁN MARTÍN // SYSTEM.ACCESS // PORTFOLIO // IVÁN MARTÍN // ";
+// Se repite lo suficiente para que cada mitad sea más ancha que la ranura
+// incluso en pantallas grandes: así el bucle nunca deja huecos vacíos.
+const marqueeText = "PORTFOLIO // IVÁN MARTÍN // ".repeat(12);
 
 // Tecnologías principales que se muestran bajo el nombre.
 const heroTech = ["Unity 3D", "C# Scripting", "Next.js & React", "Python"];
@@ -37,8 +38,8 @@ export default function HomeContent({ contributions }: { contributions: Contribu
         className="neu-inset-sm pointer-events-none absolute top-6 right-28 left-4 flex overflow-hidden rounded-full py-2 font-mono text-[11px] tracking-[0.35em] whitespace-nowrap text-muted select-none sm:right-36 sm:left-10"
       >
         <span className="marquee flex">
-          <span>{marqueeText}</span>
-          <span>{marqueeText}</span>
+          <span className="shrink-0 whitespace-pre">{marqueeText}</span>
+          <span className="shrink-0 whitespace-pre">{marqueeText}</span>
         </span>
       </div>
 
