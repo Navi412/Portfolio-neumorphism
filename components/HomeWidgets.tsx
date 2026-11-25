@@ -12,9 +12,9 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { actionLinks, estudios, proyectos, skillCategories, type ActionLink } from "@/lib/content";
-import { useT } from "@/lib/i18n";
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { actionLinks, cursos, estudios, proyectos, skillCategories, type ActionLink } from "@/lib/content";
+import { useT, type Loc } from "@/lib/i18n";
 import { useStrings } from "@/lib/strings";
 
 /* ---------- Profundidad con el ratón ---------- */
@@ -156,30 +156,87 @@ export function SkillDial() {
 
 /* ---------- Proyecto destacado ---------- */
 
-const pigmentum = proyectos[0];
+/** Índice que avanza solo cada `ms` (quieto si se prefiere menos movimiento). */
+function useRotatingIndex(length: number, ms: number) {
+  const [index, setIndex] = useState(0);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (reduce || length < 2) return;
+    const id = window.setInterval(() => setIndex((i) => (i + 1) % length), ms);
+    return () => window.clearInterval(id);
+  }, [reduce, length, ms]);
+
+  return index;
+}
+
+/**
+ * Apila todas las opciones en la misma celda y solo muestra la activa (fundido).
+ * La altura es siempre la de la más alta, así la tarjeta no cambia de tamaño al rotar.
+ */
+function CrossFade({ active, className, children }: { active: number; className?: string; children: ReactNode[] }) {
+  return (
+    <div className={`grid ${className ?? ""}`}>
+      {children.map((child, i) => (
+        <motion.div
+          key={i}
+          initial={false}
+          animate={{ opacity: i === active ? 1 : 0, y: i === active ? 0 : 6 }}
+          transition={{ duration: 0.35 }}
+          aria-hidden={i !== active}
+          className="col-start-1 row-start-1 min-w-0"
+          style={{ pointerEvents: i === active ? "auto" : "none" }}
+        >
+          {child}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- Proyecto destacado (alterna Pigmentum y Backlog) ---------- */
+
+const featured = proyectos.filter((p) => p.slug === "pigmentum" || p.slug === "backlog");
 
 export function ProjectWidget() {
   const s = useStrings();
+  const active = useRotatingIndex(featured.length, 5000);
+  const project = featured[active];
   return (
-    <Link href={`/portfolio/proyectos/${pigmentum.slug}`} className={cardLink} aria-label={s.viewProject(pigmentum.title)}>
+    <Link href={`/portfolio/proyectos/${project.slug}`} className={cardLink} aria-label={s.viewProject(project.title)}>
       <div className="neu-inset rounded-3xl p-2">
         <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-black">
-          {pigmentum.imageUrl && (
-            <Image
-              src={pigmentum.imageUrl}
-              alt={s.backgroundOf(pigmentum.title)}
-              fill
-              sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-          )}
+          <AnimatePresence initial={false}>
+            {project.imageUrl && (
+              <motion.div
+                key={project.slug}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={project.imageUrl}
+                  alt={s.backgroundOf(project.title)}
+                  fill
+                  sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
       <div className="mt-4 flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <p className="eyebrow text-accent-ink">{pigmentum.type}</p>
-          <p className="mt-1 truncate text-2xl font-extrabold tracking-tight">{pigmentum.title}</p>
-        </div>
+        <CrossFade active={active} className="min-w-0 flex-1">
+          {featured.map((p) => (
+            <div key={p.slug}>
+              <p className="eyebrow text-accent-ink">{p.type}</p>
+              <p className="mt-1 truncate text-2xl font-extrabold tracking-tight">{p.title}</p>
+            </div>
+          ))}
+        </CrossFade>
         <span
           aria-hidden="true"
           className="neu-accent flex h-12 w-12 shrink-0 items-center justify-center rounded-full pl-0.5 text-lg transition-transform duration-300 group-hover:scale-110"
@@ -191,37 +248,152 @@ export function ProjectWidget() {
   );
 }
 
-/* ---------- Formación en curso ---------- */
+/* ---------- Formación reciente (alterna Claude Code y Nebrija) ---------- */
 
-const current = estudios.find((e) => e.enCurso) ?? estudios[0];
+type Reciente = {
+  key: string;
+  href: string;
+  enCurso: boolean;
+  status: Loc<string>;
+  fecha: Loc<string>;
+  title: Loc<string>;
+  centro: Loc<string>;
+  logo?: string;
+  tags: Loc<string[]>;
+};
 
-export function StudyWidget() {
+const nebrija = estudios.find((e) => e.enCurso) ?? estudios[0];
+const claudeCourse = cursos.find((c) => c.id === "claude-code-in-action") ?? cursos[0];
+
+const recientes: Reciente[] = [
+  {
+    key: claudeCourse.id,
+    href: `/portfolio/estudios/${claudeCourse.id}`,
+    enCurso: !!claudeCourse.enCurso,
+    status: claudeCourse.enCurso ? { es: "EN CURSO", en: "IN PROGRESS" } : { es: "COMPLETADO", en: "COMPLETED" },
+    fecha: claudeCourse.fecha,
+    title: claudeCourse.title,
+    centro: claudeCourse.proveedor,
+    logo: claudeCourse.logo,
+    tags: claudeCourse.tags,
+  },
+  {
+    key: nebrija.id,
+    href: "/portfolio/estudios",
+    enCurso: !!nebrija.enCurso,
+    status: nebrija.status,
+    fecha: nebrija.fecha,
+    title: nebrija.title,
+    centro: nebrija.centro,
+    logo: nebrija.logo,
+    tags: nebrija.tags,
+  },
+];
+
+function RecienteBody({ r }: { r: Reciente }) {
   const t = useT();
-  const s = useStrings();
   return (
-    <Link href="/portfolio/estudios" className={cardLink} aria-label={s.viewStudies}>
+    <>
       <div className="flex items-center justify-between gap-3">
         <span className="neu-inset-sm inline-flex items-center gap-2 rounded-full px-3 py-1.5 eyebrow">
           <span
             className={`glow h-2 w-2 rounded-full ${
-              current.enCurso ? "animate-pulse bg-amber-500 text-amber-500" : "bg-emerald-500 text-emerald-500"
+              r.enCurso ? "animate-pulse bg-amber-500 text-amber-500" : "bg-emerald-500 text-emerald-500"
             }`}
             aria-hidden="true"
           />
-          {t(current.status)}
+          {t(r.status)}
         </span>
-        <span className="eyebrow text-muted">{current.fecha}</span>
+        <span className="eyebrow text-muted">{t(r.fecha)}</span>
       </div>
-      <p className="mt-5 text-lg leading-snug font-extrabold tracking-tight">{t(current.title)}</p>
-      <p className="mt-2 text-sm text-muted">{t(current.centro).split(" · ")[0]}</p>
-      <div className="mt-auto flex flex-wrap gap-2 pt-5">
-        {t(current.tags).slice(0, 2).map((tag) => (
+      <div className="mt-5 flex items-start gap-3">
+        {r.logo && (
+          <span className="neu-inset-sm flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1.5">
+            <Image src={r.logo} alt="" width={32} height={32} className="h-full w-full object-contain" />
+          </span>
+        )}
+        <div className="min-w-0">
+          <p className="text-lg leading-snug font-extrabold tracking-tight">{t(r.title)}</p>
+          <p className="mt-2 text-sm text-muted">{t(r.centro).split(" · ")[0]}</p>
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-2 pt-5">
+        {t(r.tags).slice(0, 2).map((tag) => (
           <span key={tag} className="neu-sm rounded-full px-3 py-1 text-xs font-semibold text-muted">
             {tag}
           </span>
         ))}
       </div>
-    </Link>
+    </>
+  );
+}
+
+/**
+ * La tarjeta se anima a la altura de la opción activa, pero el hueco que ocupa en la
+ * cuadrícula es siempre el de la opción más alta (sizer invisible), así lo de alrededor no se mueve.
+ */
+export function StudyWidget() {
+  const s = useStrings();
+  const active = useRotatingIndex(recientes.length, 6000);
+  const current = recientes[active];
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [heights, setHeights] = useState<number[]>([]);
+
+  // Altura natural de cada opción (se actualiza si cambia el ancho o el idioma).
+  useLayoutEffect(() => {
+    const measure = () => setHeights(itemRefs.current.map((el) => el?.offsetHeight ?? 0));
+    measure();
+    const ro = new ResizeObserver(measure);
+    itemRefs.current.forEach((el) => el && ro.observe(el));
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div className="grid h-full">
+      {/* Reserva el hueco de la opción más alta */}
+      <div aria-hidden="true" className="invisible col-start-1 row-start-1 grid">
+        <div className={`${cardLink} !h-auto`}>
+          <div className="grid">
+            {recientes.map((r) => (
+              <div key={r.key} className="col-start-1 row-start-1">
+                <RecienteBody r={r} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <Link
+        href={current.href}
+        className={`${cardLink} !h-auto col-start-1 row-start-1 self-start`}
+        aria-label={s.viewStudies}
+      >
+        <motion.div
+          initial={false}
+          animate={heights[active] ? { height: heights[active] } : undefined}
+          transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+          style={{ minHeight: heights[active] ? undefined : "9rem" }}
+          className="relative"
+        >
+          {recientes.map((r, i) => (
+            <motion.div
+              key={r.key}
+              ref={(el) => {
+                itemRefs.current[i] = el;
+              }}
+              initial={false}
+              animate={{ opacity: i === active ? 1 : 0, y: i === active ? 0 : 6 }}
+              transition={{ duration: 0.35 }}
+              aria-hidden={i !== active}
+              className="absolute inset-x-0 top-0 flex flex-col"
+              style={{ pointerEvents: i === active ? "auto" : "none" }}
+            >
+              <RecienteBody r={r} />
+            </motion.div>
+          ))}
+        </motion.div>
+      </Link>
+    </div>
   );
 }
 

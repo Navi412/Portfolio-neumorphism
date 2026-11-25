@@ -97,6 +97,11 @@ export default function EstudiosPage() {
               >
                 <Link href={`/portfolio/estudios/${c.id}`} className="block p-5">
                   <div className="flex items-center gap-2 text-xs">
+                    {c.logo && (
+                      <span className="neu-inset-sm mr-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl p-1.5">
+                        <Image src={c.logo} alt="" width={24} height={24} className="h-full w-full object-contain" />
+                      </span>
+                    )}
                     <span
                       className={`glow h-2 w-2 shrink-0 rounded-full ${
                         c.enCurso ? "animate-pulse bg-amber-500 text-amber-500" : "bg-emerald-500 text-emerald-500"

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { PageHeader, PageShell, TagList } from "@/components/ui";
 import { cursos } from "@/lib/content";
 import { useT } from "@/lib/i18n";
@@ -28,6 +29,11 @@ export default function CursoDetail({ id }: { id: string }) {
         transition={{ duration: 0.4 }}
         className="neu-inset mt-12 flex flex-col gap-6 rounded-[2rem] p-6 sm:p-10"
       >
+        {c.logo && (
+          <div className="neu flex h-16 w-16 items-center justify-center rounded-2xl p-3">
+            <Image src={c.logo} alt={s.logoOf(c.proveedor)} width={40} height={40} className="h-full w-full object-contain" />
+          </div>
+        )}
         <p className="max-w-4xl text-2xl leading-snug font-bold tracking-tight sm:text-3xl">{t(c.desc)}</p>
         {(c.url || c.verifyUrl) && (
           <div className="flex flex-wrap gap-4">

@@ -37,6 +37,8 @@ export type Curso = {
   fecha: Text;
   desc: Text;
   tags: Loc<string[]>;
+  /** Icono del curso (en public/). */
+  logo?: string;
   /** Lo aprendido o en lo que se trabaja; se omite la sección si no hay. */
   aprendizajes?: Loc<string[]>;
   /** Qué aporta el curso al perfil; se omite la sección si no hay. */
@@ -214,6 +216,7 @@ export const cursos: Curso[] = [
     id: "claude-code-in-action",
     title: "Claude Code in Action",
     proveedor: "Anthropic",
+    logo: "/anthropic.png",
     fecha: { es: "Nov. 2026", en: "Nov 2026" },
     desc: {
       es: "Curso oficial y gratuito de Anthropic sobre Claude Code, una herramienta de programación con IA que trabaja desde la terminal: lee los archivos del proyecto, ejecuta comandos y modifica código mediante un sistema de herramientas. Enseña a integrarlo en el flujo de desarrollo real y a confiar en su resultado.",
